@@ -1,0 +1,75 @@
+### Create Patient - John Doe
+
+POST http://localhost:8080/patients
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com"
+}
+> {% client.global.set("john_doe_id", response.body.id); %}
+
+### Create Patient - Jane Doe
+POST http://localhost:8080/patients
+Content-Type: application/json
+
+{
+"name": "Jane Doe",
+"email": "jane.doe@example.com"
+}
+> {% client.global.set("jane_doe_id", response.body.id); %}
+
+### List Patients
+GET http://localhost:8080/patients?page=0&size=1
+
+
+### Get Patient by ID - John Doe
+GET http://localhost:8080/patients/{{john_doe_id}}
+
+### Get Patient by ID - Jane Doe
+GET http://localhost:8080/patients/{{jane_doe_id}}
+
+### Create Treatment Plan for John Doe
+POST http://localhost:8080/patients/{{john_doe_id}}/treatment-plans
+Content-Type: application/json
+
+{
+  "name": "Plan 1",
+  "status": "ACTIVE",
+  "startDate": "2025-12-01",
+  "endDate": "2025-12-31"
+}
+> {% client.global.set("john_doe_treatment_plan_id", response.body.id); %}
+
+### Update Treatment Plan for John Doe
+PATCH http://localhost:8080/treatment-plans/{{john_doe_treatment_plan_id}}/status
+Content-Type: application/json
+
+{
+  "status": "ACTIVE"
+}
+
+### List Treatment Plans for John Doe
+GET http://localhost:8080/patients/{{john_doe_id}}/treatment-plans
+
+
+### Create Refill for John Doe's Treatment Plan
+POST http://localhost:8080/treatment-plans/{{john_doe_treatment_plan_id}}/refill-orders
+Content-Type: application/json
+
+> {% client.global.set("john_doe_refill_order_id", response.body.id); %}
+
+### Update Refill Order Status for John Doe
+PATCH http://localhost:8080/refill-orders/{{john_doe_refill_order_id}}/status
+Content-Type: application/json
+
+{
+  "status": "APPROVED"
+}
+
+### Get Refill Order by ID for John Doe
+GET http://localhost:8080/refill-orders/{{john_doe_refill_order_id}}
+
+
+### Search Refill Orders by Status
+GET http://localhost:8080/refill-orders?status=APPROVED
